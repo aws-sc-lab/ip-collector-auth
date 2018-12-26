@@ -12,6 +12,8 @@ package jlhuangliang;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
+import java.util.Objects;
+
 /**
  * Handles IO for a Java Lambda function as a custom authorizer for API Gateway
  *
@@ -37,6 +39,9 @@ public class APIGatewayAuthorizerHandler implements RequestHandler<TokenAuthoriz
         // if the client token is not recognized or invalid
         // you can send a 401 Unauthorized response to the client by failing like so:
         // throw new RuntimeException("Unauthorized");
+        if (!Objects.equals(token, "2fdde7b21b6a4a4fb5fbe47475a36dcc")) {
+          throw new RuntimeException("Unauthorized......");
+        }
 
         // if the token is valid, a policy should be generated which will allow or deny access to the client
 
@@ -63,8 +68,7 @@ public class APIGatewayAuthorizerHandler implements RequestHandler<TokenAuthoriz
         // and will apply to subsequent calls to any method/resource in the RestApi
         // made with the same token
 
-        // the example policy below denies access to all resources in the RestApi
-        return new AuthPolicy(principalId, AuthPolicy.PolicyDocument.getDenyAllPolicy(region, awsAccountId, restApiId, stage));
+        return new AuthPolicy(principalId, AuthPolicy.PolicyDocument.getAllowAllPolicy(region, awsAccountId, restApiId, stage));
     }
 
 }
